@@ -3,6 +3,7 @@ package de.ulikoenig.asperge;
 import android.content.Context;
 import android.os.Handler;
 
+import java.util.Calendar;
 import java.util.TimerTask;
 
 /**
@@ -14,21 +15,26 @@ class TimeDisplayTimerTask extends TimerTask {
     private Handler mHandler = new Handler();
     private Context context;
 
-    public TimeDisplayTimerTask(Context applicationContext){
+    public TimeDisplayTimerTask(Context applicationContext) {
         this.context = applicationContext;
     }
 
     @Override
     public void run() {
-        // run on another thread
-        mHandler.post(new Runnable() {
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        if (hour == 11) {
 
-            @Override
-            public void run() {
-                BackgroundTask task = new BackgroundTask(new BGTCallBack(context), context.getApplicationContext());
-                task.execute();
-            }
+            // run on another thread
+            mHandler.post(new Runnable() {
 
-        });
+                @Override
+                public void run() {
+                    BackgroundTask task = new BackgroundTask(new BGTCallBack(context), context.getApplicationContext());
+                    task.execute();
+                }
+
+            });
+        }
     }
 }
